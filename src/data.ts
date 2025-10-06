@@ -6,7 +6,7 @@ export const initialRooms = {
     name: "Room 1",
     renterName: "Aakash",
     reading: 10,
-    lastUpdated: null,
+    lastUpdatedAt: null,
     status: RoomStatus.occupied,
   },
   room2: {
@@ -14,7 +14,7 @@ export const initialRooms = {
     name: "Room 2",
     renterName: "",
     reading: 20,
-    lastUpdated: null,
+    lastUpdatedAt: null,
     status: RoomStatus.vacant,
   },
   room3: {
@@ -22,7 +22,7 @@ export const initialRooms = {
     name: "Room 3",
     renterName: "Roshan",
     reading: 30,
-    lastUpdated: null,
+    lastUpdatedAt: null,
     status: RoomStatus.occupied,
   },
   room4: {
@@ -30,7 +30,7 @@ export const initialRooms = {
     name: "Room 4",
     renterName: "Saksham",
     reading: 40,
-    lastUpdated: null,
+    lastUpdatedAt: null,
     status: RoomStatus.occupied,
   },
   kitchen: {
@@ -38,7 +38,7 @@ export const initialRooms = {
     name: "Kitchen",
     renterName: "Roshan",
     reading: 50,
-    lastUpdated: null,
+    lastUpdatedAt: null,
     status: RoomStatus.occupied,
   },
 };

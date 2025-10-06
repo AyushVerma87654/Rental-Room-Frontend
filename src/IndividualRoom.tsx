@@ -37,7 +37,6 @@ const IndividualRoom: FC<IndividualRoomProps> = ({
       ...room,
       reading,
       renterName,
-      lastUpdated: new Date(),
     });
   };
   const updateRoomStatus = () => {
@@ -45,7 +44,7 @@ const IndividualRoom: FC<IndividualRoomProps> = ({
       room.status === RoomStatus.occupied
         ? RoomStatus.vacant
         : RoomStatus.occupied;
-    let renterName = "";
+    let renterName = " ";
     let reading = 0;
     document.querySelectorAll("input").forEach((item) => {
       if (item.id === "renterName" && item.value.length > 0)
@@ -57,7 +56,6 @@ const IndividualRoom: FC<IndividualRoomProps> = ({
       reading,
       renterName,
       status,
-      lastUpdated: new Date(),
     });
   };
   return (
@@ -115,8 +113,8 @@ const IndividualRoom: FC<IndividualRoomProps> = ({
             <div className="mb-4">
               <p className="text-lg text-gray-600 font-medium">Last Updated:</p>
               <p className="text-md text-gray-500">
-                {room.lastUpdated
-                  ? new Date(room.lastUpdated).toLocaleString()
+                {room.lastUpdatedAt
+                  ? new Date(room.lastUpdatedAt).toLocaleString()
                   : "Never"}
               </p>
             </div>

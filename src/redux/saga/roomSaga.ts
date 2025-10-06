@@ -1,6 +1,10 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
+  fetchRoomsCompletedAction,
+  fetchRoomsErrorAction,
+  fetchRoomsInitiatedAction,
+  updateDataAction,
   updatePriceCompletedAction,
   updatePriceErrorAction,
   updatePriceInitiatedAction,
@@ -8,8 +12,22 @@ import {
   updateRoomErrorAction,
   updateRoomInitiatedAction,
 } from "../slice/roomSlice";
-import { Room } from "../../models/room";
-import { updatePrice, updateRoom } from "../../api/room";
+import { FetchRoomsPayload, Room } from "../../models/room";
+import {
+  fetchRooms,
+  updateData,
+  updatePrice,
+  updateRoom,
+} from "../../api/room";
+
+function* fetchingRoom(): Generator {
+  try {
+    const data = (yield call(fetchRooms)) as any as FetchRoomsPayload;
+    yield put(fetchRoomsCompletedAction(data));
+  } catch (error: any) {
+    yield put(fetchRoomsErrorAction(error));
+  }
+}
 
 function* readingUpdate(action: PayloadAction<Room>): Generator {
   try {
@@ -29,9 +47,21 @@ function* priceUpdate(action: PayloadAction<number>): Generator {
   }
 }
 
+function* updatingData(): Generator {
+  try {
+    const data = (yield call(updateData)) as any as FetchRoomsPayload;
+    console.log("data", data);
+    yield put(fetchRoomsCompletedAction(data));
+  } catch (error: any) {
+    yield put(fetchRoomsErrorAction(error));
+  }
+}
+
 function* roomSaga() {
+  yield takeEvery(fetchRoomsInitiatedAction, fetchingRoom);
   yield takeEvery(updateRoomInitiatedAction, readingUpdate);
   yield takeEvery(updatePriceInitiatedAction, priceUpdate);
+  yield takeEvery(updateDataAction, updatingData);
 }
 
 export default roomSaga;

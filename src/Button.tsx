@@ -15,7 +15,7 @@ const Button: FC<ButtonProps> = ({
       onClick={onClick}
       type={type}
       className={clsx(
-        "bg-rose-500 w-full h-full rounded-md text-white font-semibold cursor-pointer px-6 py-2 shadow",
+        "bg-rose-500 rounded-md text-white font-semibold cursor-pointer px-6 py-2 shadow",
         className
       )}
       {...props}

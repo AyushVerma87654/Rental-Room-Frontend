@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Room, Rooms } from "../../models/room";
-import { initialRooms } from "../../data";
+import { FetchRoomsPayload, Room, Rooms } from "../../models/room";
 
 export type RoomState = {
   rooms: Rooms;
@@ -15,10 +14,10 @@ export type RoomState = {
 };
 
 const initialState: RoomState = {
-  rooms: initialRooms,
+  rooms: {},
   selectedRoomId: "",
   isEditing: false,
-  pricePerUnit: 5,
+  pricePerUnit: 0,
   selectedBillingRoomId: "",
   billingAmount: 0,
   isKitchenIncluded: false,
@@ -42,12 +41,19 @@ const roomSlice = createSlice({
     updatePriceCompleted,
     updatePriceError,
     setBillingAmount,
+    fetchRoomsInitiated,
+    fetchRoomsCompleted,
+    fetchRoomsError,
+    updateData,
   },
 });
 
 const { actions, reducer: roomReducer } = roomSlice;
 
 export const {
+  fetchRoomsInitiated: fetchRoomsInitiatedAction,
+  fetchRoomsCompleted: fetchRoomsCompletedAction,
+  fetchRoomsError: fetchRoomsErrorAction,
   updateRoomInitiated: updateRoomInitiatedAction,
   updateRoomCompleted: updateRoomCompletedAction,
   updateRoomError: updateRoomErrorAction,
@@ -60,9 +66,31 @@ export const {
   updatePriceInitiated: updatePriceInitiatedAction,
   updatePriceCompleted: updatePriceCompletedAction,
   updatePriceError: updatePriceErrorAction,
+  updateData: updateDataAction,
 } = actions;
 
 export default roomReducer;
+
+function fetchRoomsInitiated(state: RoomState) {
+  state.loading = true;
+}
+
+function fetchRoomsCompleted(
+  state: RoomState,
+  action: PayloadAction<FetchRoomsPayload>
+) {
+  action.payload.rooms.forEach((room) => {
+    state.rooms = { ...state.rooms, [room.roomId]: room };
+  });
+  console.log("state.rooms", state.rooms);
+  state.pricePerUnit = action.payload.price;
+  state.loading = false;
+}
+
+function fetchRoomsError(state: RoomState, action: PayloadAction<string>) {
+  state.loading = false;
+  state.message = action.payload;
+}
 
 function updateRoomInitiated(state: RoomState, _action: PayloadAction<Room>) {
   state.loading = true;
@@ -125,3 +153,5 @@ function updatePriceError(state: RoomState, action: PayloadAction<string>) {
   state.loading = false;
   state.message = action.payload;
 }
+
+function updateData(_state: RoomState) {}

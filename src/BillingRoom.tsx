@@ -38,6 +38,7 @@ const BillingRoom: FC<BillingRoomProps> = ({
   isKitchenIncluded,
   toggleIsKitchenIncluded,
 }) => {
+  console.log("billing room");
   const totalAmount = () => {
     let newReading = 0;
     let roomRent = 0;
@@ -104,7 +105,7 @@ const BillingRoom: FC<BillingRoomProps> = ({
           </Button>
           <Button
             onClick={() => {
-              selectedBillingRoom.roomId && toggleIsKitchenIncluded();
+              selectedBillingRoom?.roomId && toggleIsKitchenIncluded();
             }}
             className="!w-40"
           >

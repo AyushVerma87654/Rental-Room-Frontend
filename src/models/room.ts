@@ -3,11 +3,13 @@ export type Room = {
   name: string;
   renterName: string;
   reading: number;
-  lastUpdated: Date | null;
+  lastUpdatedAt: Date | null;
   status: RoomStatus;
 };
 
 export type Rooms = Record<string, Room>;
+
+export type FetchRoomsPayload = { rooms: Room[]; price: number };
 
 export enum RoomStatus {
   occupied = "OCCUPIED",
