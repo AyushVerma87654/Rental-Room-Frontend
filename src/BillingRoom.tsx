@@ -47,7 +47,7 @@ const BillingRoom: FC<BillingRoomProps> = ({
     });
     const kitchenReading = isKitchenIncluded ? kitchen.reading : 0;
     const amount =
-      (newReading - ((+selectedBillingRoom?.reading ?? 0) + +kitchenReading)) *
+      (newReading - (+(selectedBillingRoom?.reading ?? 0) + +kitchenReading)) *
         pricePerUnit +
       roomRent;
     setBillingAmount(amount);
