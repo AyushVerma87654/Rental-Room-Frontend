@@ -59,60 +59,74 @@ const IndividualRoom: FC<IndividualRoomProps> = ({
     });
   };
   return (
-    <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="w-[65%] h-[70%] bg-white rounded-xl shadow-2xl p-10 relative overflow-auto">
-        <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center my-4.5">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="w-[95%] sm:w-[90%] md:w-[65%] h-[85%] sm:h-[75%] md:h-[90%] bg-white rounded-xl shadow-2xl p-4 sm:p-6 md:p-10 relative overflow-auto">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-6 text-center">
           {room.name}
         </h1>
-        <div className="flex items-center justify-around mt-12">
-          <div className="w-48 h-72 px-2">
-            <IoMdCloseCircle
-              onClick={() => {
-                setSelectedRoomId("");
-                isEditing && toggleIsEditing();
-              }}
-              className="absolute top-16 right-6 text-3xl cursor-pointer transition"
-            />
-            <MdEdit
-              className="absolute top-16 right-20 text-3xl cursor-pointer transition"
-              onClick={() => toggleIsEditing()}
-            />
-            {isEditing && (
-              <Button
-                className={`absolute bottom-12 right-20 !w-36 !h-10`}
-                onClick={updateRoom}
-              >
-                Update
-              </Button>
-            )}
 
+        <IoMdCloseCircle
+          onClick={() => {
+            setSelectedRoomId("");
+            isEditing && toggleIsEditing();
+          }}
+          className="absolute top-4 sm:top-6 right-2 xs:right-4 md:top-12 md:right-6 text-xl sm:text-2xl md:text-3xl cursor-pointer transition"
+        />
+        <MdEdit
+          onClick={() => toggleIsEditing()}
+          className="absolute top-4 sm:top-6 right-8 xs:right-12 md:top-12 md:right-20 text-xl sm:text-2xl md:text-3xl cursor-pointer transition"
+        />
+
+        {isEditing && (
+          <Button
+            className="absolute bottom-4 right-4 md:bottom-12 md:right-20 !w-28 md:!w-36 !h-9 md:!h-10 text-sm md:text-base"
+            onClick={updateRoom}
+          >
+            Update
+          </Button>
+        )}
+
+        <div className="flex flex-col md:flex-row items-center justify-around mt-8 gap-6 md:gap-0">
+          <div className="w-full md:w-1/2 px-1 md:px-2">
             <div className="mb-4">
-              <p className="text-lg text-gray-600 font-medium">Renter Name:</p>
+              <p className="text-sm md:text-lg text-gray-600 font-medium">
+                Renter Name:
+              </p>
               {isEditing ? (
-                <Input id="renterName" defaultValue={room.renterName} />
+                <Input
+                  id="renterName"
+                  defaultValue={room.renterName}
+                  className="!text-sm md:!text-base"
+                />
               ) : (
-                <p className="text-2xl font-semibold text-gray-800 h-8.5">
+                <p className="text-lg md:text-2xl font-semibold text-gray-800 h-8.5">
                   {room.renterName || "Not Assigned"}
                 </p>
               )}
             </div>
 
             <div className="mb-4">
-              <p className="text-lg text-gray-600 font-medium">
+              <p className="text-sm md:text-lg text-gray-600 font-medium">
                 Current Reading:
               </p>
               {isEditing ? (
-                <Input id="reading" defaultValue={room.reading} />
+                <Input
+                  id="reading"
+                  defaultValue={room.reading}
+                  className="!text-sm md:!text-base"
+                />
               ) : (
-                <p className="text-2xl font-semibold text-gray-800 h-8.5">
+                <p className="text-lg md:text-2xl font-semibold text-gray-800 h-8.5">
                   {room.reading}
                 </p>
               )}
             </div>
 
             <div className="mb-4">
-              <p className="text-lg text-gray-600 font-medium">Last Updated:</p>
-              <p className="text-md text-gray-500">
+              <p className="text-sm md:text-lg text-gray-600 font-medium">
+                Last Updated:
+              </p>
+              <p className="text-xs md:text-base text-gray-500">
                 {room.lastUpdatedAt
                   ? new Date(room.lastUpdatedAt).toLocaleString()
                   : "Never"}
@@ -120,13 +134,13 @@ const IndividualRoom: FC<IndividualRoomProps> = ({
             </div>
           </div>
 
-          <div>
-            <div className="mb-6 flex items-center">
-              <span className="text-lg text-gray-600 font-medium mb-1 mr-2">
+          <div className="w-full md:w-1/3">
+            <div className="mb-6 flex items-center gap-2 justify-center">
+              <span className="text-sm md:text-lg text-gray-600 font-medium">
                 Status:
               </span>
               <span
-                className={`px-4 py-1 text-center font-semibold rounded-full ${
+                className={`px-3 py-1 text-xs md:text-sm text-center font-semibold rounded-full ${
                   room.status === RoomStatus.occupied
                     ? "bg-green-100 text-green-700"
                     : "bg-gray-200 text-gray-600"
@@ -136,7 +150,10 @@ const IndividualRoom: FC<IndividualRoomProps> = ({
               </span>
             </div>
 
-            <Button onClick={updateRoomStatus} className="mt-4">
+            <Button
+              onClick={updateRoomStatus}
+              className="mt-4 w-36 md:w-44 text-sm md:text-base"
+            >
               {room.status === RoomStatus.occupied
                 ? "Mark as Vacant"
                 : "Mark as Occupied"}

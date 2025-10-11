@@ -38,7 +38,6 @@ const BillingRoom: FC<BillingRoomProps> = ({
   isKitchenIncluded,
   toggleIsKitchenIncluded,
 }) => {
-  console.log("billing room");
   const totalAmount = () => {
     let newReading = 0;
     let roomRent = 0;
@@ -48,35 +47,36 @@ const BillingRoom: FC<BillingRoomProps> = ({
     });
     const kitchenReading = isKitchenIncluded ? kitchen.reading : 0;
     const amount =
-      (newReading - ((selectedBillingRoom?.reading ?? 0) + kitchenReading)) *
+      (newReading - ((+selectedBillingRoom?.reading ?? 0) + +kitchenReading)) *
         pricePerUnit +
       roomRent;
     setBillingAmount(amount);
   };
 
   return (
-    <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-100">
-      <div className="w-[75%] h-[80%] bg-white rounded-xl shadow-2xl p-10 relative overflow-auto">
-        <h1 className="text-4xl font-bold text-gray-800 mb-9 text-center my-4.5">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="w-full max-w-4xl h-[90vh] md:h-[85vh] bg-white rounded-xl shadow-2xl p-5 md:p-10 relative overflow-y-auto">
+        <h1 className="text-xl md:text-4xl font-bold text-gray-800 mb-6 text-center">
           Billing Room
         </h1>
 
         <IoMdCloseCircle
           onClick={() => setSelectedRoomId("")}
-          className="absolute top-16 right-6 text-3xl cursor-pointer transition"
+          className="absolute top-4 right-4 md:top-6 md:right-6 text-xl md:text-3xl cursor-pointer transition"
         />
 
-        <div className="flex items-center gap-4 mb-6">
+        {/* Room Selection Buttons - responsive grid layout */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 md:gap-4 mb-6">
           {rooms.map((room) => (
             <Button
               key={room.roomId}
-              className={
+              className={`w-full text-sm md:text-base px-2 py-1 ${
                 room.roomId === selectedBillingRoom?.roomId
                   ? "border-4 border-blue-500 !text-green-400"
                   : isKitchenIncluded && room.roomId === "kitchen"
                   ? "border-4 border-blue-500 !text-green-400"
                   : ""
-              }
+              }`}
               onClick={() => setSelectedBillingRoomId(room.roomId)}
             >
               {room.name}
@@ -84,82 +84,105 @@ const BillingRoom: FC<BillingRoomProps> = ({
           ))}
         </div>
 
-        <div className="flex items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-4">
-            <p className="text-lg font-medium text-gray-700">
+        {/* Price Section */}
+        <div className="flex flex-col xs:flex-row items-center justify-between mx-auto gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+            <p className="text-sm md:text-lg font-medium text-gray-700">
               Price per unit (Rs):
             </p>
-
             <Input
               type="number"
               value={pricePerUnit}
               onChange={(e) => setPricePerUnit(+e.target.value)}
-              className="!w-32"
+              className="!w-28 md:!w-32 !text-sm md:!text-base"
             />
           </div>
-          <Button
-            onClick={() => initiateUpdatePrice(pricePerUnit)}
-            className="!w-40"
-          >
-            Update Price
-          </Button>
-          <Button
-            onClick={() => {
-              selectedBillingRoom?.roomId && toggleIsKitchenIncluded();
-            }}
-            className="!w-40"
-          >
-            Include Kitchen
-          </Button>
+
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <Button
+              className="text-sm md:text-base"
+              onClick={() => initiateUpdatePrice(pricePerUnit)}
+            >
+              Update Price
+            </Button>
+            <Button
+              className="text-sm md:text-base"
+              onClick={() =>
+                selectedBillingRoom?.roomId &&
+                selectedBillingRoom?.roomId !== "kitchen" &&
+                toggleIsKitchenIncluded()
+              }
+            >
+              Include Kitchen
+            </Button>
+          </div>
         </div>
 
+        {/* Readings Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <div>
-            <label className="block text-gray-700 mb-1">Previous Reading</label>
+            <label className="block text-sm md:text-base text-gray-700 mb-1">
+              Previous Reading
+            </label>
             <Input
               type="number"
               defaultValue={
                 isKitchenIncluded
-                  ? kitchen.reading + selectedBillingRoom?.reading
+                  ? +kitchen.reading + +selectedBillingRoom?.reading
                   : selectedBillingRoom?.reading
               }
-              disabled={true}
-              className="!h-11"
+              disabled
+              className="!h-10 md:!h-11 w-full text-sm md:text-base"
             />
           </div>
           <div>
-            <label className="block text-gray-700 mb-1">New Reading</label>
+            <label className="block text-sm md:text-base text-gray-700 mb-1">
+              New Reading
+            </label>
             <Input
               id="newReading"
               type="number"
-              className="!h-11"
               placeholder="e.g. 180"
+              className="!h-10 md:!h-11 w-full text-sm md:text-base"
             />
           </div>
         </div>
+
+        {/* Rent and Total Amount */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <div>
-            <label className="block text-gray-700 mb-1">Room Rent</label>
+            <label className="block text-sm md:text-base text-gray-700 mb-1">
+              Room Rent
+            </label>
             <Input
               id="roomRent"
               type="number"
               placeholder="e.g. 180"
-              className="!h-11"
+              className="!h-10 md:!h-11 w-full text-sm md:text-base"
             />
           </div>
           <div>
-            <label className="block text-gray-700 mb-1">Total Amount</label>
+            <label className="block text-sm md:text-base text-gray-700 mb-1">
+              Total Amount
+            </label>
             <Input
               type="number"
               value={billingAmount}
-              disabled={true}
-              className="!h-11"
+              disabled
+              className="!h-10 md:!h-11 w-full text-sm md:text-base"
             />
           </div>
         </div>
-        <Button onClick={totalAmount} className="!h-10 !w-64 mt-5">
-          Calcuate Billing Amount
-        </Button>
+
+        {/* Calculate Button */}
+        <div className="flex justify-center">
+          <Button
+            onClick={totalAmount}
+            className="!w-48 md:!w-64 text-sm md:text-base"
+          >
+            Calculate Billing Amount
+          </Button>
+        </div>
       </div>
     </div>
   );
